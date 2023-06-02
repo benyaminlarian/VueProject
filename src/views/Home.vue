@@ -14,13 +14,14 @@
       <li v-if="st.isActive">{{ st.name }}</li>
     </ul> -->
 
+<body>
 
-    <header>
-        <div class="card relative z-2" style="display: flex; justify-content: center;">
-        <Menubar :model="navbar" style="min-width: 40rem; justify-content: center;"/>
-      </div>
-    </header>
-    
+  <header>
+    <div  style="display: flex; justify-content: center;">
+      <Menubar :model="navbar" style="width:40rem; justify-content: center;"/>
+    </div>
+  </header>
+  
     <div style="display: flex; justify-content:center;">
         <DataTable  :value="forcasts" dataKey="dt" tableStyle="max-width: 50rem;" paginator="true" paginatorPosition="top" :rowsPerPageOptions="[5,10,20]" :rows=10>
         <Column field="dt_txt" header="date and time"></Column>
@@ -31,6 +32,7 @@
         <Paginator rows="10"/>
       </DataTable>
     </div>
+</body>
 </template>
 
 <script>
@@ -55,7 +57,7 @@ export default {
       navbar: [
         { label: 'Home', to: '/' },
         { label: 'Page one' },
-        { label: 'About', to: 'About' }
+        { label: 'Search', to: 'Search' }
       ]
 
 
@@ -97,6 +99,7 @@ export default {
 </script>
 
 <style>
+
 .active {
   background-color: black;
   width: 100px;
