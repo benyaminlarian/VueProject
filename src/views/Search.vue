@@ -7,8 +7,8 @@
                     <span class="p-input-icon-right" style="margin-top: 59%;">
                         <InputText v-model="searched" placeholder="جست و جو کنید" @keypress="getData" class="p-inputtext"/>
                         <i class="pi pi-microphone" @click="voiceSearch()"/>
-                    </span>
-                    <i class="pi pi-search" @click="getDataClick()" style="padding-top: 29.5%;"/>
+                      </span>
+                      <i class="pi pi-search" @click="getDataClick()" style="padding-top: 29.5%;"/>
                 </span>
         </div>
     </body>
@@ -137,7 +137,7 @@ export default {
 
         voiceSearch(){
 
-        } 
+        }
     },
 
 }
