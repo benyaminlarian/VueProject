@@ -137,6 +137,27 @@ export default {
 
         voiceSearch(){
 
+const recognition = new webkitSpeechRecognition();
+
+recognition.lang = 'fa-IR';  // set language to Persian, change if needed
+recognition.continuous = false;
+recognition.interimResults = false;
+
+recognition.start();
+
+recognition.onresult = (event) => {
+  const result = event.results[0][0].transcript;
+
+  // Set the result as searched value
+  this.searched = result;
+
+  recognition.stop();
+};
+
+recognition.onerror = (event) => {
+  console.error(event.error);
+  recognition.stop();
+};
         }
     },
 
