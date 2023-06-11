@@ -19,14 +19,25 @@
                 </template>
                 <template #content>
                     <p class="Ap" v-html="res.Source['AText']"></p>
+                    <br>
+                    <div style="  font-family: 'Vazirmatn';">
+                      <div>
+                        از طریق: {{ res['Source']['systemID'] }}
+                      </div>
+                      موضوع: {{ res['Source']['subjectID'] }}
+                      <div v-if="res['Source']['gender']">
+                        پرسشگر: {{ res['Source']['gender'] }} {{ res['Source']['age'] }}ساله
+                      </div>
+                    </div>
+
                 </template>
             </Card>
             </div>
         </div>
 
         <div class="paginator">
-          <Button label="بیشتر" class="card2" @click="showMore()"/>
-          <Button label="کمتر" class="card2" @click="showLess()"/>
+          <Button label="نتایج بیشتر" class="card2" @click="showMore()"/>
+          <Button label="ابتدای صفحه" class="card2" @click="showLess()"/>
         </div>
 
     </body> 
@@ -51,9 +62,10 @@ export default{
     },
     methods:{
         getRes(searched,start,end) {
-            console.log(this.route.query)
+            // console.log(this.route.query)
             axios.post('https://searchapi.pasokhgoo.ir/Search/search', { query: searched, from: start,to:end})
-                .then(res => { this.resultShow = res.data})
+                .then(res => { this.resultShow = res.data;
+                this.editRes(this.resultShow)})
         },
         getData(e) {
             if (e.key == "Enter" && this.searchedAgain) {
@@ -75,32 +87,68 @@ export default{
         },
 
         showLess(){
-          if(this.upTo>10){this.upTo=this.upTo-10;this.getRes(this.searchedAgain,0,this.upTo)}
+          window.scrollTo(0,0);
+          if(this.upTo>10){this.upTo=10;this.getRes(this.searchedAgain,0,this.upTo);}
         },
 
         voiceSearch(){
-          const recognition = new webkitSpeechRecognition();
+        const recognition = new webkitSpeechRecognition();
 
-recognition.lang = 'fa-IR';  // set language to Persian, change if needed
-recognition.continuous = false;
-recognition.interimResults = false;
+        recognition.lang = 'fa-IR';  // set language to Persian, change if needed
+        recognition.continuous = false;
+        recognition.interimResults = false;
 
-recognition.start();
+        recognition.start();
 
-recognition.onresult = (event) => {
-  const result = event.results[0][0].transcript;
+        recognition.onresult = (event) => {
+        const result = event.results[0][0].transcript;
+        // Set the result as searched value
+        this.searchedAgain = result;
 
-  // Set the result as searched value
-  this.searchedAgain = result;
+        recognition.stop();
+        };
 
-  recognition.stop();
-};
+        recognition.onerror = (event) => {
+        console.error(event.error);
+        recognition.stop();
+        };
 
-recognition.onerror = (event) => {
-  console.error(event.error);
-  recognition.stop();
-};     
+        },
+
+        editRes(showres){
+          showres['Results'].forEach(Element=>{
+            if (Element['Source']['subjectID']===1){Element['Source']['subjectID']='فقه و احکام'}
+            if (Element['Source']['subjectID']===2){Element['Source']['subjectID']='تاریخ'}
+            if (Element['Source']['subjectID']===3){Element['Source']['subjectID']='کلام و اعتقادات'}
+            if (Element['Source']['subjectID']===4){Element['Source']['subjectID']='قرآن'}
+            if (Element['Source']['subjectID']===5){Element['Source']['subjectID']='حدیث'}
+            if (Element['Source']['subjectID']===6){Element['Source']['subjectID']='اخلاق'}
+            if (Element['Source']['subjectID']===7){Element['Source']['subjectID']='مشاوره'}
+            if (Element['Source']['subjectID']===8){Element['Source']['subjectID']='فنی'}
+            if (Element['Source']['subjectID']===9){Element['Source']['subjectID']='اجرایی'}
+            if (Element['Source']['subjectID']===10){Element['Source']['subjectID']='مدریت'}
+            if (Element['Source']['subjectID']===11){Element['Source']['subjectID']='سیاسی'}
+
+            if (Element['Source']['systemID']==='1'){Element['Source']['systemID']='مدیریت'}
+            if (Element['Source']['systemID']==='2'){Element['Source']['systemID']='تلفنی'}
+            if (Element['Source']['systemID']==='3'){Element['Source']['systemID']='متنی'}
+            if (Element['Source']['systemID']==='4'){Element['Source']['systemID']='گفتوگوی آنلاین'}
+            if (Element['Source']['systemID']==='5'){Element['Source']['systemID']='ارزیابی'}
+            if (Element['Source']['systemID']==='6'){Element['Source']['systemID']='پیامک'}
+            if (Element['Source']['systemID']==='7'){Element['Source']['systemID']='صندوق صوتی'}
+            if (Element['Source']['systemID']==='8'){Element['Source']['systemID']='پاسخگویی انجمن'}
+            if (Element['Source']['systemID']==='9'){Element['Source']['systemID']='جوامع مجازی'}
+            if (Element['Source']['systemID']==='10'){Element['Source']['systemID']='برگزیده'}
+            if (Element['Source']['systemID']==='11'){Element['Source']['systemID']='سامانه مدریت فایلها'}
+            if (Element['Source']['systemID']==='12'){Element['Source']['systemID']='کیف پول'}
+
+
+            if (Element['Source']['gender']===1){Element['Source']['gender']='خانم'}
+            if (Element['Source']['gender']===2){Element['Source']['gender']='آقا'}
+            if (Element['Source']['gender']===3){Element['Source']['gender']='نامشخص'}
+          })
         }
+
     }
     ,
     mounted(){
@@ -138,6 +186,7 @@ recognition.onerror = (event) => {
   src: url(https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2muijPEe1n2vVbfJRklWgzCRCT7g.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 
 body{ direction: rtl;
       background-image: url('../assets/mostafa-meraji-26Lj_7efUAI-unsplash\ \(1\).jpg');
