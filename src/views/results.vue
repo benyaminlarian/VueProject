@@ -76,6 +76,30 @@ export default{
 
         showLess(){
           if(this.upTo>10){this.upTo=this.upTo-10;this.getRes(this.searchedAgain,0,this.upTo)}
+        },
+
+        voiceSearch(){
+          const recognition = new webkitSpeechRecognition();
+
+recognition.lang = 'fa-IR';  // set language to Persian, change if needed
+recognition.continuous = false;
+recognition.interimResults = false;
+
+recognition.start();
+
+recognition.onresult = (event) => {
+  const result = event.results[0][0].transcript;
+
+  // Set the result as searched value
+  this.searchedAgain = result;
+
+  recognition.stop();
+};
+
+recognition.onerror = (event) => {
+  console.error(event.error);
+  recognition.stop();
+};     
         }
     }
     ,
