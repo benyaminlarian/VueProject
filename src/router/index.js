@@ -8,7 +8,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
-      path: "", name:'Home', component: ()=>import('../views/Home.vue')
+      path: "", name:'Home', component: ()=>import('../views/Search.vue')
     },
     {
       path: "/Search", name:'Search', component: ()=>import('../views/Search.vue')
